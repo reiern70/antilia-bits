@@ -3,7 +3,7 @@
 It contains a Wicket behavior (ReplaceWithEffectBehavior) that allows to execute some "effects" before and after
 a component is replaced via AJAX.
 
- ## How to use it? ##
+## How to use it? ##
  
  Java code
  
