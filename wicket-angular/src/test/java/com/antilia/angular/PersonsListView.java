@@ -27,8 +27,28 @@ public class PersonsListView extends AngularListView<Person> {
 	private static final String userID = "userID";
 	
 	private AbstractDefaultAjaxBehavior ajaxBehavior;
+
+	/**
+	 * Constructor using a page based service.
+	 * @param id
+	 */
 	public PersonsListView(String id) {
-		super(id, WicketApplication.PERSONS, PersonsJSonifier.getInstance());
+		super(id, WicketApplication.PERSONS, PersonsJSonifier.getInstance());					
+	}
+	
+	/**
+	 * Constructor using 
+	 * 
+	 * @param id
+	 * @param mountPath
+	 */
+	public PersonsListView(String id, String mountPath) {
+		super(id, mountPath);					
+	}
+	
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		Form<Person> form = new Form<Person>("form");		
 		add(form);
 		form.add(modalWindow = new ModalWindow("modalWindow"));
@@ -44,7 +64,7 @@ public class PersonsListView extends AngularListView<Person> {
 				modalWindow.setContent(new PersonDetailPanel(modalWindow.getContentId(), Model.of(person)));
 				modalWindow.show(target);
 			}
-		});				
+		});	
 	}
 	
 	@Override

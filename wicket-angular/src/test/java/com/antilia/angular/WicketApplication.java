@@ -2,6 +2,7 @@ package com.antilia.angular;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -10,6 +11,9 @@ import jgravatar.GravatarDefaultImage;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+
+import com.antilia.angular.repeater.IJSONifier;
+import com.antilia.angular.repeater.JsonAngularListViewResourceReference;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
@@ -28,6 +32,7 @@ public class WicketApplication extends WebApplication
 		"Perez", "Kurtz", "Martin", "Juan", "Dos Pasos",
 		"Reinaldo", "Castro", "Zenca", "Perla", "Dominguez", "Kobayashi", "Cupper", "Messi", "Zaviola"};
 
+	public static final String PERSONS_MOUNT_POINT = "/persons/";
 	
 	private static Random random = new Random();
 	static {
@@ -87,6 +92,21 @@ public class WicketApplication extends WebApplication
 		super.init();
 
 		personService = new PersonService();
+		
+		mountResource(PERSONS_MOUNT_POINT, new JsonAngularListViewResourceReference<Person>() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected IJSONifier<Person> getIjsoNifier() {
+				return PersonsJSonifier.getInstance();
+			}
+
+			@Override
+			protected Iterator<? extends Person> getListIterator() {
+				return PERSONS.iterator();
+			}
+		});
 		
 		// add your configuration here
 	}

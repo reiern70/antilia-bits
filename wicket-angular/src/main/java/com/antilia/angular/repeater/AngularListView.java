@@ -17,6 +17,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebResponse;
 
 /**
+ * Angular powered ListView.
  * 
  * @author Ernesto Reinaldo Barreiro (reiern70).
  * 
@@ -31,9 +32,15 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 	private List<B> elements;
 
 	private final String viewName;
+	
+	private String mountPath;
 
 	/**
+	 * Constructor.
+	 * 
 	 * @param id
+	 * @param elements
+	 * @param ijsoNifier
 	 */
 	public AngularListView(String id, List<B> elements, IJSONifier<B> ijsoNifier) {
 		super(id);
@@ -43,17 +50,33 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 		this.viewName = "AngularRepeatingView" + getMarkupId();
 		this.add(new AttributeModifier("ng-controller", Model.of(this.viewName)));
 	}
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param id
+	 * @param mountPath
+	 */
+	public AngularListView(String id, String mountPath) {
+		super(id);
+		this.mountPath = mountPath;
+		this.setOutputMarkupId(true);
+		this.viewName = "AngularRepeatingView" + getMarkupId();
+		this.add(new AttributeModifier("ng-controller", Model.of(this.viewName)));
+	}
 
 	@Override
 	public void onResourceRequested() {
-		WebResponse webResponse = (WebResponse) getRequestCycle().getResponse();
-		webResponse.setContentType("application/json");
-		generateJSON(ijsoNifier, elements.iterator(), webResponse.getOutputStream());
+		if(getMountPath() == null) {
+			WebResponse webResponse = (WebResponse) getRequestCycle().getResponse();
+			webResponse.setContentType("application/json");
+			generateJSON(ijsoNifier, elements.iterator(), webResponse.getOutputStream());
+		}
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		long size = elements.size();
+		long size = elements != null? elements.size(): -1;
 		StringBuilder builder = new StringBuilder();
 		builder.append("function ");
 		builder.append(viewName);
@@ -61,7 +84,8 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 		builder.append("$scope.size=");
 		builder.append(size);
 		builder.append(";\n");
-		CharSequence url = urlFor(IResourceListener.INTERFACE, null);
+		// if there is a mount path use it.
+		CharSequence url = getMountPath() != null? getMountPath(): urlFor(IResourceListener.INTERFACE, null);
 		builder.append("$http.get('");
 		builder.append(url);
 		builder.append("').success(function(data) {\n");
@@ -104,6 +128,14 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 
 	public String getViewName() {
 		return viewName;
+	}
+
+	public String getMountPath() {
+		return mountPath;
+	}
+
+	public void setMountPath(String mountPath) {
+		this.mountPath = mountPath;
 	}
 
 }
