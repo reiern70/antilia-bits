@@ -1,0 +1,23 @@
+/* app css stylesheet */
+
+body {
+  padding-top: 20px;
+}
+
+h2.persons {
+ 	width: 620px; 	
+ 	text-align: center;
+ 	font-weight: 1.2em;			
+ 	border-bottom: 1px solid black;
+ 	margin-bottom: 10px;
+}
+
+div.persons {
+	height: 400px;
+	width: 600px;
+	overflow: auto;	
+}
+
+div.persons table {
+	width: 100%;
+}
