@@ -19,20 +19,19 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+	<parent>
+		<artifactId>antilia-bits</artifactId>
+		<groupId>com.antilia</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.antilia.replacewitheffect</groupId>
+	<groupId>com.antilia</groupId>
 	<artifactId>wicket-replace-with-effect</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-		<!-- TODO project name  -->
-	<name>quickstart</name>
+	<name>wicket-replace-with-effect</name>
 	<description></description>
-	<!--
-		<organization>
-			<name>company name</name>
-			<url>company url</url>
-		</organization>
-	-->
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -41,8 +40,6 @@
 		</license>
 	</licenses>
 	<properties>
-		<wicket.version>6.7.0-SNAPSHOT</wicket.version>
-		<jetty.version>7.6.3.v20120416</jetty.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
