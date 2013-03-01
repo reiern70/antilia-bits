@@ -11,11 +11,12 @@
   <div class="container-fluid">
   <div class="row-fluid">  
   	<div wicket:id="persons"></div>
-  	<div class="span2" ng-show="element != null" ng-cloak ng-controller="PersonDetail">
+  	<div class="span2 PersonDetail" ng-show="element != null" ng-cloak ng-controller="PersonDetail">
 	 	<h1>{{element.name}} {{element.lastName}} </h1>
 	 	<div>
 	 		<img ng-src="{{element.bimg}}">
 	 	</div>
+	 	<div style="clear: both;"></div>
 	 	<ol>
 	 		<li><b>Email:</b> {{element.email}}</li>
 			<li><b>Profile:</b> {{element.ld}}</li>

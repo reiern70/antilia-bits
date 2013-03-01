@@ -20,6 +20,10 @@ h2.persons {
 	color: white;
 }
 
+div.persons  {
+	border: 1px solid graytext;
+}
+
 div.persons {
 	height: 400px;
 	width: 600px;
@@ -28,4 +32,8 @@ div.persons {
 
 div.persons table {
 	width: 100%;
+}
+
+.PersonDetail img {
+	float: right;
 }
