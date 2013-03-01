@@ -8,8 +8,11 @@ h2.persons {
  	width: 620px; 	
  	text-align: center;
  	font-weight: 1.2em;			
- 	border-bottom: 1px solid black;
  	margin-bottom: 10px;
+}
+
+.persons .odd {
+	background-color: graytext;
 }
 
 div.persons {

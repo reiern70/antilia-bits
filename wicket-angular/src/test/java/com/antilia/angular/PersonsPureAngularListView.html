@@ -29,7 +29,7 @@
 	          	<wicket:message key="lastName"/>
 	          </th>
 			  <th>
-	          	<wicket:message key="image"/>
+	          	e-mail
 	          </th>
 			  <th>
 	          	<wicket:message key="age"/>
@@ -43,7 +43,7 @@
 	      	<tbody>
 	      	<tr ng-repeat="person in elements | filter:query | orderBy:orderProp" ng-class-odd="'odd'" ng-class-even="'even'">
 	      	  <td>
-	          	<a ng-click="selectRow($index);">{{person.id}}</a>
+	          	<a href="javaScript:void(0);" ng-click="selectRow($index);">{{person.id}}</a>
 	          </td>
 	          <td>
 	          	{{person.name}}
