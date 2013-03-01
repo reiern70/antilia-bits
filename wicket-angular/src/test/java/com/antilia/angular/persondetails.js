@@ -10,6 +10,7 @@ function PersonDetail($scope, $http) {
 	
 	$scope.$on('RowSelected', function(event, args) {
 		var selected = args['selected'];
+		$scope.element  = null;
 		if(selected != null) {
 			var url1 = url+ '&' + userID + '=' + selected;
 		}	
