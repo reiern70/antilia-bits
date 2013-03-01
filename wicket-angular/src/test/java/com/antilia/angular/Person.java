@@ -24,6 +24,8 @@ public class Person implements Serializable {
 	
 	private Date registered;
 	
+	private String longDescription;
+	
 	private String email;
 	
 	private String imageUrl;
@@ -99,6 +101,14 @@ public class Person implements Serializable {
 
 	public void setBigImageUrl(String bigImageUrl) {
 		this.bigImageUrl = bigImageUrl;
+	}
+
+	public String getLongDescription() {
+		return longDescription;
+	}
+
+	public void setLongDescription(String longDescription) {
+		this.longDescription = longDescription;
 	}
 
 }

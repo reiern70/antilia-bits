@@ -3,6 +3,7 @@ package com.antilia.angular.repeater;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +35,30 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 	private final String viewName;
 	
 	private String mountPath;
+	
+	private static final String JSON_DATA = "_jonsData";
+	
+	private List<IAngularRequestHandler> handlers = new ArrayList<IAngularRequestHandler>();
+	
+	private static abstract class JSONListHandler<B> implements IAngularRequestHandler {
 
+		private static final long serialVersionUID = 1L;
+				
+
+		@Override
+		public boolean canHandleRequest(Request request) {
+			return getAngularListView().getMountPath() == null && request.getRequestParameters().getParameterValue(JSON_DATA).toString() != null;
+		}
+
+		@Override
+		public void handleRequest(Request request, WebResponse response) {
+			response.setContentType("application/json");
+			generateJSON(getAngularListView().ijsoNifier, getAngularListView().elements.iterator(), response.getOutputStream());
+		}
+		
+		protected abstract AngularListView<B> getAngularListView();
+		
+	}
 	/**
 	 * Constructor.
 	 * 
@@ -48,6 +72,15 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 		this.ijsoNifier = ijsoNifier;
 		this.setOutputMarkupId(true);
 		this.viewName = "AngularRepeatingView" + getMarkupId();
+		handlers.add(new JSONListHandler<B>() {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected AngularListView<B> getAngularListView() {
+				return AngularListView.this;
+			}
+		});
 		this.add(new AttributeModifier("ng-controller", Model.of(this.viewName)));
 	}
 	
@@ -67,25 +100,40 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 
 	@Override
 	public void onResourceRequested() {
-		if(getMountPath() == null) {
-			WebResponse webResponse = (WebResponse) getRequestCycle().getResponse();
-			webResponse.setContentType("application/json");
-			generateJSON(ijsoNifier, elements.iterator(), webResponse.getOutputStream());
+		 WebResponse response = (WebResponse)RequestCycle.get().getResponse();
+		 Request request = RequestCycle.get().getRequest();
+		for(IAngularRequestHandler handler: handlers) {
+			if(handler.canHandleRequest(request)) {
+				handler.handleRequest(request, response);
+				break;
+			}
 		}
 	}
 
+	/**
+	 * 
+	 * @param handler
+	 */
+	public void addHandler(IAngularRequestHandler handler) {
+		handlers.add(handler);
+	}
+	
+	public void removeHandler(IAngularRequestHandler handler) {
+		handlers.remove(handler);
+	}
+	
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		long size = elements != null? elements.size(): -1;
 		StringBuilder builder = new StringBuilder();
 		builder.append("function ");
 		builder.append(viewName);
-		builder.append("($scope, $http) {\n");
+		builder.append("($scope, $http, $rootScope) {\n");
 		builder.append("$scope.size=");
 		builder.append(size);
 		builder.append(";\n");
 		// if there is a mount path use it.
-		CharSequence url = getMountPath() != null? getMountPath(): urlFor(IResourceListener.INTERFACE, null);
+		CharSequence url = getMountPath() != null? getMountPath(): urlFor(IResourceListener.INTERFACE, null)+ "&"+JSON_DATA+"=true";
 		builder.append("$http.get('");
 		builder.append(url);
 		builder.append("').success(function(data) {\n");
@@ -136,6 +184,14 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 
 	public void setMountPath(String mountPath) {
 		this.mountPath = mountPath;
+	}
+
+	public IJSONifier<B> getIjsoNifier() {
+		return ijsoNifier;
+	}
+
+	public void setIjsoNifier(IJSONifier<B> ijsoNifier) {
+		this.ijsoNifier = ijsoNifier;
 	}
 
 }

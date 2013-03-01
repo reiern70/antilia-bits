@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" ng-app>
+<head>
+  <meta charset="utf-8">
+  <title>Persons</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <script src="http://code.angularjs.org/1.0.5/angular.min.js"></script>
+</head>
+<body>
+  <div class="container-fluid">
+  <div class="row-fluid">  
+  	<div wicket:id="persons"></div>
+  	<div class="span2" ng-controller="PersonDetail">
+	 	<h1>{{element.name}} {{element.lastName}} </h1>
+	 	<div>
+	 		<img ng-src="{{element.bimg}}">
+	 	</div>
+	 	<ol>
+	 		<li><b>Email:</b> {{element.email}}</li>
+			<li><b>Profile:</b> {{element.ld}}</li>
+	 	</ol>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

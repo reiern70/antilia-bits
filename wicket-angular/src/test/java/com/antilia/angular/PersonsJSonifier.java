@@ -41,6 +41,20 @@ public class PersonsJSonifier implements IJSONifier<Person> {
 				+"}";
 	}
 	
+	public String toLONGJSON(Person bean) {
+		return "{"
+				+toJSON("id", Long.toString(bean.getId()), true)
+				+toJSON("name",bean.getName(), true)
+				+toJSON("lastName",bean.getLastName(), true)
+				+toJSON("age",bean.getAge(), true)
+				+toJSON("email",bean.getEmail(), true)
+				+toJSON("img",bean.getImageUrl(), true)
+				+toJSON("bimg",bean.getBigImageUrl(), true)
+				+toJSON("ld",bean.getLongDescription(), true)
+				+toJSON("registered",DATE_FORMAT.format(bean.getRegistered()), false)
+				+"}";
+	}
+	
 	private String toJSON(String name, String value, boolean comma) {
 		return "\""+name+"\":\""+value+"\""+(comma?",":"");
 	}

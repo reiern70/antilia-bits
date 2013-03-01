@@ -35,12 +35,16 @@ public class WicketApplication extends WebApplication
 	public static final String PERSONS_MOUNT_POINT = "/persons/";
 	
 	private static Random random = new Random();
+	
+	private static  RandomString randomString = new RandomString(500);
+	
 	static {
 		for(long i = 0; i < 300; i++) {
 			Person person = new Person(i);
 			person.setName(NAMES[random.nextInt(NAMES.length)]);
 			person.setLastName(LASTNAMES[random.nextInt(LASTNAMES.length)]);
 			person.setAge(random.nextInt(100));
+			person.setLongDescription(randomString.nextString());
 			person.setRegistered((new Date(0+10000*random.nextInt(1000000))));
 			String email = person.getName()+"."+person.getLastName()+"@mycompnay.com";
 			person.setEmail(email);

@@ -12,5 +12,7 @@ public class HomePage extends WebPage {
 		
 		add(new BookmarkablePageLink<Void>("link1", AngularListViewPage.class, null));
 		add(new BookmarkablePageLink<Void>("link2", AngularListViewMountedResourcePage.class, null));
+		add(new BookmarkablePageLink<Void>("link3", PureAngularListViewMountedResourcePage.class, null));
+		
     }
 }

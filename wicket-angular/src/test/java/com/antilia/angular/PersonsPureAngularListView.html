@@ -1,9 +1,4 @@
 <wicket:panel>
-<form wicket:id ="form">
-	<div wicket:id="modalWindow"></div>
-</form>	
-<div class="container-fluid">
-  <div class="row-fluid">
     <div class="span2"> 	    
  	<p>
       <label><wicket:message key="search"/></label> <input ng-model="query">
@@ -18,7 +13,7 @@
 		</select>
  	</p>
     </div>
-    <div class="span10">
+    <div class="span4">
 	  <h2 class="persons">Persons</h2> 
       <div class="persons">
 		<table>    
@@ -48,7 +43,7 @@
 	      	<tbody>
 	      	<tr ng-repeat="person in elements | filter:query | orderBy:orderProp" ng-class-odd="'odd'" ng-class-even="'even'">
 	      	  <td>
-	          	<a onclick="showDetails({{person.id}});">{{person.id}}</a>
+	          	<a ng-click="selectRow($index);">{{person.id}}</a>
 	          </td>
 	          <td>
 	          	{{person.name}}
@@ -69,7 +64,5 @@
         	</tbody>         
       	</table>		
       </div> 
-    </div>
-  </div>
-</div>
+    </div>	
 </wicket:panel>
