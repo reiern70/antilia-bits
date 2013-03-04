@@ -18,7 +18,6 @@ public class PureAngularListViewMountedResourcePage extends WebPage {
 	public PureAngularListViewMountedResourcePage(final PageParameters parameters) {
 		super(parameters);
 		
-		System.out.println("AAAA");
 		AngularWebMarkupContainer personsContext = new AngularWebMarkupContainer("personsContext", "PersonsContext");
 		
 		personsContext.addHandler(new IAngularRequestHandler() {
