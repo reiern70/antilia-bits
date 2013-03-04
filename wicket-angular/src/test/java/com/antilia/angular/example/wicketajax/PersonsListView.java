@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.antilia.angular;
+package com.antilia.angular.example.wicketajax;
 
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -12,6 +12,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 
+import com.antilia.angular.WicketApplication;
+import com.antilia.angular.example.Person;
+import com.antilia.angular.example.PersonDetailPanel;
+import com.antilia.angular.example.PersonsJSonifier;
 import com.antilia.angular.repeater.AngularListView;
 
 /**
@@ -32,8 +36,8 @@ public class PersonsListView extends AngularListView<Person> {
 	 * Constructor using a page based service.
 	 * @param id
 	 */
-	public PersonsListView(String id) {
-		super(id, WicketApplication.PERSONS, PersonsJSonifier.getInstance());					
+	public PersonsListView(String id, boolean lazy) {
+		super(id, WicketApplication.PERSONS, PersonsJSonifier.getInstance(), null, lazy);					
 	}
 	
 	/**
@@ -43,7 +47,7 @@ public class PersonsListView extends AngularListView<Person> {
 	 * @param mountPath
 	 */
 	public PersonsListView(String id, String mountPath) {
-		super(id, mountPath);					
+		super(id, mountPath, null);					
 	}
 	
 	@Override

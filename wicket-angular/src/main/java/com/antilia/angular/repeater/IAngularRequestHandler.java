@@ -1,6 +1,7 @@
 package com.antilia.angular.repeater;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.http.WebResponse;
@@ -26,4 +27,13 @@ public interface IAngularRequestHandler extends Serializable {
 	 * @param response
 	 */
 	public void handleRequest(Request request, WebResponse response);
+	
+	
+	/**
+	 * Allows handler to contribute to scope.
+	 * 
+	 * @param variables
+	 * @return
+	 */
+	public String contributeToScope(Map<String, Object> variables);
 }

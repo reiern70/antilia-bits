@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.antilia.angular;
+package com.antilia.angular.example;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;

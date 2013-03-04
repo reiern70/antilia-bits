@@ -4,6 +4,10 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.antilia.angular.example.angularajax.PureAngularListViewMountedResourcePage;
+import com.antilia.angular.example.wicketajax.AngularListViewMountedResourcePage;
+import com.antilia.angular.example.wicketajax.AngularListViewPage;
+
 public class HomePage extends WebPage {
 	private static final long serialVersionUID = 1L;
 

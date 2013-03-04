@@ -12,6 +12,9 @@ import jgravatar.GravatarDefaultImage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
+import com.antilia.angular.example.IPersonService;
+import com.antilia.angular.example.Person;
+import com.antilia.angular.example.PersonsJSonifier;
 import com.antilia.angular.repeater.IJSONifier;
 import com.antilia.angular.repeater.JsonAngularListViewResourceReference;
 

@@ -1,7 +1,9 @@
-package com.antilia.angular;
+package com.antilia.angular.example.wicketajax;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import com.antilia.angular.WicketApplication;
 
 public class AngularListViewMountedResourcePage extends WebPage {
 	private static final long serialVersionUID = 1L;

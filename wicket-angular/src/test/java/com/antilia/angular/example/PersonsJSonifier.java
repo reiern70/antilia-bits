@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.antilia.angular;
+package com.antilia.angular.example;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

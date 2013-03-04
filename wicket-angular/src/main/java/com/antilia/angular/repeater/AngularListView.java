@@ -1,14 +1,19 @@
 package com.antilia.angular.repeater;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.IResourceListener;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -16,6 +21,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.util.template.PackageTextTemplate;
 
 /**
  * Angular powered ListView.
@@ -32,11 +39,10 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 
 	private List<B> elements;
 
-	private final String viewName;
+	private final String scope;
 	
 	private String mountPath;
-	
-	private static final String JSON_DATA = "_jonsData";
+		
 	
 	private List<IAngularRequestHandler> handlers = new ArrayList<IAngularRequestHandler>();
 	
@@ -44,6 +50,44 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 
 		private static final long serialVersionUID = 1L;
 				
+		private boolean lazy;
+		
+		private static final String JSON_DATA = "_jonsData";
+		
+		/**
+		 * Constructor.
+		 * 
+		 * @param lazy
+		 */
+		public JSONListHandler(boolean lazy) {
+			this.lazy = lazy;
+		}
+		
+		@Override
+		public String contributeToScope(Map<String, Object> variables) {
+			StringBuilder builder = new StringBuilder();
+			String url = (String)variables.get("url");
+			url += url.indexOf('&')>0?("&"+JSON_DATA+"=true"):"";
+			if(lazy) {
+				builder.append("$http.get('");
+				builder.append(url);
+				builder.append("').success(function(data) {");
+				builder.append("$scope.elements  = data;");
+				builder.append("});");		
+				return builder.toString();
+			} else {
+				  ByteArrayOutputStream webResponse = new ByteArrayOutputStream();
+				  generateJSON(getAngularListView().ijsoNifier, getAngularListView().elements.iterator(), webResponse);
+				
+				  builder.append("$scope.elements  = ");
+				  try {
+					builder.append(webResponse.toString(RequestCycle.get().getRequest().getCharset().name()));
+				  } catch (UnsupportedEncodingException e) {
+					  throw new WicketRuntimeException(e);
+				  }
+				  return builder.toString();
+			}
+		}
 
 		@Override
 		public boolean canHandleRequest(Request request) {
@@ -59,20 +103,23 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 		protected abstract AngularListView<B> getAngularListView();
 		
 	}
+	
 	/**
 	 * Constructor.
 	 * 
 	 * @param id
 	 * @param elements
 	 * @param ijsoNifier
+	 * @param scope;
+	 * @param lazy;
 	 */
-	public AngularListView(String id, List<B> elements, IJSONifier<B> ijsoNifier) {
+	public AngularListView(String id, List<B> elements, IJSONifier<B> ijsoNifier, String scope, boolean lazy) {
 		super(id);
 		this.elements = elements;
 		this.ijsoNifier = ijsoNifier;
 		this.setOutputMarkupId(true);
-		this.viewName = "AngularRepeatingView" + getMarkupId();
-		handlers.add(new JSONListHandler<B>() {
+		this.scope = !Strings.isEmpty(scope)?scope:("AngularListView" + getMarkupId());
+		handlers.add(new JSONListHandler<B>(lazy) {
 			
 			private static final long serialVersionUID = 1L;
 
@@ -81,7 +128,7 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 				return AngularListView.this;
 			}
 		});
-		this.add(new AttributeModifier("ng-controller", Model.of(this.viewName)));
+		this.add(new AttributeModifier("ng-controller", Model.of(this.getScope())));
 	}
 	
 	/**
@@ -89,13 +136,23 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 	 * 
 	 * @param id
 	 * @param mountPath
+	 * @param scope
 	 */
-	public AngularListView(String id, String mountPath) {
+	public AngularListView(String id, String mountPath, String scope) {
 		super(id);
 		this.mountPath = mountPath;
 		this.setOutputMarkupId(true);
-		this.viewName = "AngularRepeatingView" + getMarkupId();
-		this.add(new AttributeModifier("ng-controller", Model.of(this.viewName)));
+		this.scope = !Strings.isEmpty(scope)?scope:"AngularListView" + getMarkupId();
+		handlers.add(new JSONListHandler<B>(true) {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected AngularListView<B> getAngularListView() {
+				return AngularListView.this;
+			}
+		});
+		this.add(new AttributeModifier("ng-controller", Model.of(this.getScope())));
 	}
 
 	@Override
@@ -122,30 +179,39 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 		handlers.remove(handler);
 	}
 	
+	@SuppressWarnings("resource")
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		long size = elements != null? elements.size(): -1;
-		StringBuilder builder = new StringBuilder();
-		builder.append("function ");
-		builder.append(viewName);
-		builder.append("($scope, $http, $rootScope) {\n");
-		builder.append("$scope.size=");
-		builder.append(size);
-		builder.append(";\n");
-		// if there is a mount path use it.
-		CharSequence url = getMountPath() != null? getMountPath(): urlFor(IResourceListener.INTERFACE, null)+ "&"+JSON_DATA+"=true";
-		builder.append("$http.get('");
-		builder.append(url);
-		builder.append("').success(function(data) {\n");
-		builder.append("$scope.elements  = data;\n");
-		builder.append("});");
-		contributeToScope(builder);
-			builder.append("}\n");
-		response.render(JavaScriptHeaderItem.forScript(builder.toString(), null));
+		CharSequence url = getMountPath() != null? getMountPath(): urlFor(IResourceListener.INTERFACE, null);			
+		Map<String, Object> variables = new HashMap<String, Object>();
+		variables.put("url", url);
+		variables.put("scope", scope);		
+		variables.put("additionalParams", getAdditionalParameters());
+		StringBuilder extraContributions = new StringBuilder();
+		for(IAngularRequestHandler handler: handlers) {
+			String string = handler.contributeToScope(variables);
+			if(string != null) {
+				extraContributions.append(string.trim());
+				extraContributions.append(";");
+			}
+		}
+		
+		contributeToScope(extraContributions);
+		
+		variables.put("extraContributions", !Strings.isEmpty(extraContributions)?extraContributions.toString():"");
+		PackageTextTemplate scriptTemplate = new PackageTextTemplate(AngularListView.class, "angularListView.js");
+		response.render(JavaScriptHeaderItem.forScript(scriptTemplate.asString(variables), getMarkupId()));
 	}
 	
 	/**
-	 * Overrride to contribute to scope;
+	 * @return Return the additional parameter for controller (to be injected by angular).
+	 */
+	protected String getAdditionalParameters() {
+		return "";
+	}
+	
+	/**
+	 * Override to contribute to scope;
 	 * @param scope
 	 */
 	protected void contributeToScope(StringBuilder scope) {
@@ -174,8 +240,8 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 		}
 	}
 
-	public String getViewName() {
-		return viewName;
+	public String getScope() {
+		return scope;
 	}
 
 	public String getMountPath() {

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.antilia.angular;
+package com.antilia.angular.example;
 
 /**
  * @author reiern70
