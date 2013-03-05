@@ -7,7 +7,7 @@ function ${scope} ($scope, $http ${additionalParams}) {
 	
 	$scope.selectRow = function(id) {
 		$scope.selected = id; 
-		var args = {'selected': $scope.elements[id].id};
+		var args = {'selected': $scope.elements[id]};
 		var event = '${scope}-' + 'RowSelected'; 
 		$scope.$emit(event, args);
 	};

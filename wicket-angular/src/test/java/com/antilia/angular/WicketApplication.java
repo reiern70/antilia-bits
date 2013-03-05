@@ -15,6 +15,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import com.antilia.angular.example.IPersonService;
 import com.antilia.angular.example.Person;
 import com.antilia.angular.example.PersonsJSonifier;
+import com.antilia.angular.example.angularajax.StatelessMasterDetailPage;
 import com.antilia.angular.example.basic.BasicListViewLazyPage;
 import com.antilia.angular.example.basic.BasicListViewPage;
 import com.antilia.angular.example.filtering.FilterPersonListViewPage;
@@ -121,6 +122,9 @@ public class WicketApplication extends WebApplication
 		mountPage("basic", BasicListViewPage.class);
 		mountPage("basic-lazy", BasicListViewLazyPage.class);
 		mountPage("/filtering", FilterPersonListViewPage.class);
+		
+		mountPage("/stateless-master-detail", StatelessMasterDetailPage.class);
+		
 		
 		// add your configuration here
 	}

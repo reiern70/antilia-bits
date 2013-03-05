@@ -7,10 +7,10 @@ import com.antilia.angular.example.PersonsJSonifier;
 import com.antilia.angular.repeater.AngularWebMarkupContainer;
 import com.antilia.angular.repeater.EventBroadcasterHandler;
 
-public class PureAngularListViewMountedResourcePage extends WebPage {
+public class StatelessMasterDetailPage extends WebPage {
 	private static final long serialVersionUID = 1L;
 
-	public PureAngularListViewMountedResourcePage(final PageParameters parameters) {
+	public StatelessMasterDetailPage(final PageParameters parameters) {
 		super(parameters);
 		
 		AngularWebMarkupContainer personsContext = new AngularWebMarkupContainer("personsContext", "PersonsContext");
@@ -19,7 +19,7 @@ public class PureAngularListViewMountedResourcePage extends WebPage {
 
 		add(personsContext);
 		
-		personsContext.add(new PersonsPureAngularListView("persons", "PersonsList", false));
+		personsContext.add(new PersonsAngularListView("persons", "PersonsList", false));
 		
 		personsContext.add(new PersonDetails("details", "PersonDetails", PersonsJSonifier.getInstance()));		
 

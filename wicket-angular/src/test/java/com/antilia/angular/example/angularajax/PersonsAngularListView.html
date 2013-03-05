@@ -43,7 +43,7 @@
 	      	<tbody>
 	      	<tr ng-repeat="person in elements | filter:query | orderBy:orderProp" ng-class-odd="'odd'" ng-class-even="'even'">
 	      	  <td>
-	          	<a href="javaScript:void(0);" ng-click="selectRow($index);">{{person.id}}</a>
+	          	<a href="javaScript:void(0);" ng-click="selectRow(person.id);">{{person.id}}</a>
 	          </td>
 	          <td>
 	          	{{person.name}}

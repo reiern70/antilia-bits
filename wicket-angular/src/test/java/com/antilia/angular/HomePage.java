@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.CoreLibrariesContributor;
 
-import com.antilia.angular.example.angularajax.PureAngularListViewMountedResourcePage;
+import com.antilia.angular.example.angularajax.StatelessMasterDetailPage;
 import com.antilia.angular.example.wicketajax.AngularListViewMountedResourcePage;
 import com.antilia.angular.example.wicketajax.AngularListViewPage;
 
@@ -19,7 +19,7 @@ public class HomePage extends WebPage {
 		
 		add(new BookmarkablePageLink<Void>("link1", AngularListViewPage.class, null));
 		add(new BookmarkablePageLink<Void>("link2", AngularListViewMountedResourcePage.class, null));
-		add(new BookmarkablePageLink<Void>("link3", PureAngularListViewMountedResourcePage.class, null));		
+		add(new BookmarkablePageLink<Void>("link3", StatelessMasterDetailPage.class, null));		
     }
 	
 	@Override

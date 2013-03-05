@@ -12,7 +12,7 @@ import com.antilia.angular.repeater.AngularListView;
  * @author reiern70
  *
  */
-public class PersonsPureAngularListView extends AngularListView<Person> {
+public class PersonsAngularListView extends AngularListView<Person> {
 
 	private static final long serialVersionUID = 1L;
 			
@@ -21,7 +21,7 @@ public class PersonsPureAngularListView extends AngularListView<Person> {
 	 * Constructor using a page based service.
 	 * @param id
 	 */
-	public PersonsPureAngularListView(String id,  String scope, boolean lazy) {
+	public PersonsAngularListView(String id,  String scope, boolean lazy) {
 		super(id, WicketApplication.PERSONS, PersonsJSonifier.getInstance(), scope , lazy);			
 	}
 	
