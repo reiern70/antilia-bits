@@ -12,7 +12,7 @@
 			<div class="span8">
 				<h2>Building <a href="http://angularjs.org/">AngularJS</a> powered <a href="http://wicket.apache.org/">Wicket</a> based WEB applications</h2>
 				<p>
-					By: Ernesto Reinaldo Barreiro.  (05-Feb-2013).
+					By: Ernesto Reinaldo Barreiro.  (05-March-2013).
 				</p>
 				<section id="introduction">
 					<h3>Introduction</h3>
@@ -77,8 +77,8 @@ public interface IJSONifier&lt;B> extends Serializable {
 				<section>
 					<h3>Basic example</h3>
 					<p>
-						Let's clarify/explain previous section with very basic example. 
-						We start by creating a <b>BasicPersonListView</b> defined by Java class					
+						Let's clarify/explain previous section with a very basic example. 
+						We start by creating a <b>BasicPersonListView</b> class					
 					</p>
 					<pre class="code language-java">
 public class BasicPersonListView extends AngularListView&lt;Person> {
@@ -92,7 +92,7 @@ public class BasicPersonListView extends AngularListView&lt;Person> {
 }					
 					</pre>
 					<p>
-					and HTML template
+					and an HTML template <b>AngularListView.html</b>
 					</p>
 					<pre class="code language-html">
 &lt;wicket:extend>
@@ -100,7 +100,7 @@ public class BasicPersonListView extends AngularListView&lt;Person> {
 &lt;/wicket:extend>						
 					</pre>
 					<p>
-					The we use this BasicPersonListView as in
+					Then we use this <b>BasicPersonListView</b> as in
 					</p>
 					<pre class="code language-java">
 public class BasicListViewPage extends WebPage {
@@ -121,11 +121,15 @@ public class BasicListViewPage extends WebPage {
 &lt;/body>
 					</pre>
 					<p>
-						The result can be seen <wicket:link><a href="/basic/" >here</a></wicket:link>. How example works?
+						The result can be seen <wicket:link><a href="/basic/" >here</a></wicket:link>. 
+					</p>
+					<p>
+						<b>How this example works?</b>
 					</p>
 					<ol>
 						<li>
-							Angular list view will generate the angular "context"
+							<a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular-parent/wicket-angular/src/main/java/com/antilia/angular/repeater/AngularListView.java">AngularListView</a> 
+							will generate the angular "scope"
 							<pre class="code language-javascript">
 function Persons ($scope, $http ) {
 	$scope.elements = [{"id":"0","name":"Martina","lastName":"Zaviola","age": 42,"email":"Martina.Zaviola@mycompnay.com","img":"http://www.gravatar.com/avatar/bfaa144388f243e1b5b4472a014f13e1.jpg?s=30&d=monsterid","registered":"06-01-1970"},...];
@@ -141,17 +145,17 @@ function Persons ($scope, $http ) {
 							</pre>
 						</li>
 						<li>
-							Previous <b>Persons</b> context  will be bound to HTML (on client)
+							Previous <b>Persons</b> scope  will be bound (on client) to the HTML 
 							<pre class="code language-html">
 &lt;div id="persons7" class="ng-scope" ng-controller="Persons" wicket:id="persons">
-	&lt;ol>
+	&lt;ol ng-repeat="element in elements">
 		&lt;li>
 			{{element.name}}-{{element.lastName}}.
 		&lt;/li>
 	&lt;/ol>
 &lt;/div>							
 							</pre> 
-							Angular will do the JOB of iterating over <b>$scope.elements</b> and generating client side markup.
+							Angular will do the "job" of iterating over <b>$scope.elements</b> and generating client side markup.
 						</li>
 					</ol>					
 				</section>
@@ -172,8 +176,8 @@ public class BasicListViewLazyPage extends WebPage {
 					</pre>
 					<p>
 						You can see this at work <wicket:link><a href="/basic-lazy/" >here</a></wicket:link>.
-						Mind that after page is loaded an addition (Angular) AJAX  request is issued to load the JSON
-						to populate the list view at client side.  
+						Mind that after page is loaded an additional (Angular) AJAX  request is issued to fetch the JSON
+						used to populate the list view (at client side).  
 					</p>
 					<p>
 						<b>Note:</b> Class <b>AngularListView</b>  will take care of the details for your. 
@@ -197,15 +201,15 @@ function Persons ($scope, $http ) {
 					</ol>
 				</section>	
 				<section>
-						<h3>Using angular to do some client side filtering sorting</h3>					
+						<h3>Using Angular to do some client side filtering/sorting</h3>					
 						<p>	
-							Let's use some angular magic to do some fun stuff at client side!  
+							Let's use some Angular magic to do some fun stuff at client side!  
 						</p>
 						<p>
 							We start by modifying PersonsListView so that it also contains some
 							client side filtering properties and some cosmetic CSS.
-							We do so by supplying an overriding <b>PersonsListView.html</b>,
-							that looks like follows:  
+							We do so by "overriding" base markup, instead of extending the base markup.
+							This file, <b>PersonsListView.html</b>, looks as follows:  
 						</p>
 						<pre class="code language-html">
 &lt;wicket:panel>
@@ -317,10 +321,10 @@ function Persons ($scope, $http ) {
 						</li>
 						<li>
 							We are using Wicket to generate the client side "angular template". So, all 118n and so on is generated by 
-							Wicket wich makes this consitent with the "just Wicket based" rest of the application. 
+							Wicket. 
 						</li>
 						<li>
-						Our new <b>PersonsListView</b> class just contains an additional overriden method
+							Our new <b>PersonsListView</b> class just contains an additional overriden method
 						<pre class="code language-java">
 public class PersonsListView extends AngularListView&lt;Person> {
 	
@@ -344,18 +348,18 @@ public class PersonsListView extends AngularListView&lt;Person> {
 				<section>
 					<h3>Doing stateless AJAX with the help of Angular.</h3>
 					<p>
-						Many users complain about how  difficult it is to create stateless-rich-AJAX pages 
-						with Wicket. In following example we will build a master-detail page using Angular
-						JSON based AJAX approach and still keeping everything clena an neat at server 
-						side.
+						Many users "complain" about how  difficult it is to create stateless-rich-AJAX pages 
+						with Wicket. In the next example we will build a master-detail page using Angular,
+						JSON based, AJAX approach and at the same time keep everything clean and "componentized" 
+						at Wicket side.
 					</p>
 					<p>
-						The general idea behind this example is the following.						
+						The general idea driving this example is as follows.						
 					</p>
 					<ol>
 						<li>
 							We will have a <b>personsContext</b> Angular scope that will have a 
-							<b>persons</b> list sub-scope and a <b>persons-detais</b> sub-scope. 
+							<b>persons</b> (list) sub-scope and a persons <b>detais</b> sub-scope. 
 							In HTML
 							<pre class="code language-java">
   &lt;div wicket:id="personsContext" class="row-fluid">  
@@ -366,7 +370,7 @@ public class PersonsListView extends AngularListView&lt;Person> {
 							</pre>
 						</li>
 						<li>
-							Persons-list scope will fire (<a href="http://docs.angularjs.org/api/ng.$rootScope.Scope">emit</a>) some client side Angular event (with name "Persons-RowSelected").
+							Persons-list scope will fire (see <a href="http://docs.angularjs.org/api/ng.$rootScope.Scope">emit</a>) some client side Angular event (with name "Persons-RowSelected").
 							This event will have info on the row selected. Then personContext scope  will listen to this 
 							event and broad cast a new one ("Persons-RowSelected-1") to "PersonDetails" scope. 
 						</li>
