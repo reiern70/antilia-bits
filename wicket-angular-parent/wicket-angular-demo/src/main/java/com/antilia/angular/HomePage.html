@@ -33,13 +33,13 @@
 					<h3>Angular powered <b>list-view</b></h3>
 					<p>
 						We start by rolling out an Angular powered <b>list-view</b>. The code of this "framework class"
-						can be seen <a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular/src/main/java/com/antilia/angular/repeater/AngularListView.java">here</a>.
+						can be seen <a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular-parent/wicket-angular/src/main/java/com/antilia/angular/repeater/AngularListView.java">here</a>.
 						This class acts as: 
 					</p>
 						<ol>
 							<li>
 								A repeater receiving a list of objects, of some kind, and an interface
-								<a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular/src/main/java/com/antilia/angular/repeater/IJSONifier.java">IJSONifier</a>
+								<a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular-parent/wicket-angular/src/main/java/com/antilia/angular/repeater/IJSONifier.java">IJSONifier</a>
 								that knows how to translate those objects into JSON. 
 								<pre class="code language-java">								
 public interface IJSONifier&lt;B> extends Serializable {	
@@ -479,8 +479,26 @@ public class PersonDetails extends AngularPanel {
 						</li>
 					</ol>
 				</section>
+				
+				<section>
+					<h3>TODO-Ideas</h3>
+					<ol>
+						<li>		
+							It would be interesting to create components similar to AjaxFallbackDataTable but angular based.
+						</li>
+						<li>		
+							Would it make sense to introduce an angular based AJAX request target? Override/extend wicket machinery for Angular?
+						</li>
+						<li>
+							Does it makes sense to integrate <a href="http://angular-ui.github.com/">http://angular-ui.github.com/</a>? They even have support for Igor's select.
+						</li>
+						<li>
+							Explore Angular forms and see how to integrate them with Wicket.
+						</li>
+					</ol>
+				</section>
 			</div>
 		</div>		
-	</div>
+	</div>	
 </body>
 </html>
