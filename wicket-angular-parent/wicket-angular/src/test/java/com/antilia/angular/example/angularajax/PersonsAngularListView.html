@@ -1,0 +1,68 @@
+<wicket:panel>
+    <div class="span2"> 	    
+ 	<p>
+      <label><wicket:message key="search"/></label> <input ng-model="query">
+    </p>  
+    <p>
+    	<label><wicket:message key="sortBy"/></label>
+		<select ng-model="orderProp">
+			<option value="name"><wicket:message key="name"/></option>
+			<option value="lastName"><wicket:message key="lastName"/></option>
+		    <option value="age"><wicket:message key="age"/></option>
+		    <option value="registered"><wicket:message key="registered"/></option>
+		</select>
+ 	</p>
+    </div>
+    <div class="span4">
+	  <h2 class="persons">Persons</h2> 
+      <div class="persons">
+		<table>    
+			<thead>
+			<tr>
+	      	  <th>
+	          	<wicket:message key="id"/>
+	          </th>
+	          <th>
+	          	<wicket:message key="name"/>
+	          </th>
+	          <th>
+	          	<wicket:message key="lastName"/>
+	          </th>
+			  <th>
+	          	e-mail
+	          </th>
+			  <th>
+	          	<wicket:message key="age"/>
+	          </th>	
+			  <th>
+	          	<wicket:message key="registered"/>
+	          </th>
+	        </tr>
+				
+			</thead> 
+	      	<tbody>
+	      	<tr ng-repeat="person in elements | filter:query | orderBy:orderProp" ng-class-odd="'odd'" ng-class-even="'even'">
+	      	  <td>
+	          	<a href="javaScript:void(0);" ng-click="selectRow(person.id);">{{person.id}}</a>
+	          </td>
+	          <td>
+	          	{{person.name}}
+	          </td>
+	          <td>
+	          	{{person.lastName}}
+	          </td>
+			  <td>
+	          	{{person.email}}
+	          </td>
+			  <td>
+	          	{{person.age}}
+	          </td>
+	          <td>
+	          	{{person.registered}}
+	          </td>
+	        </tr>
+        	</tbody>         
+      	</table>		
+      </div> 
+    </div>	
+</wicket:panel>
