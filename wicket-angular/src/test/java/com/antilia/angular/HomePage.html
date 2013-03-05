@@ -17,25 +17,28 @@
 				<section id="introduction">
 					<h3>Introduction</h3>
 					<p>
-						The purpose of the small article/demo is to show how Wicket and AngularJS can be used together to 
-						build very responsive-resource-efficient UIs and at the same time still use strong Wicket OO 
-						approach on server side. We will not describe/explain neither AngularJS not Wicket: my knowledge of 
-						angular is still elementary, so some of the things I say/do might surely be 
-						done in a better "Angular" way. 				
+						The purpose of this small article/demo is to show how Wicket and AngularJS can be used together to 
+						build very responsive-fast loading UIs... and at the same time still use strong Wicket OO 
+						approach on server side. We will neither describe/explain AngularJS nor Wicket. 												 				
 					</p>
 					<p>
 						For a brief introduction to Angular JS read the tutorial in <a href="http://docs.angularjs.org/tutorial/">here</a>.
 					</p>
+					<p>
+						<b>Disclaimer</b>. My knowledge of Angular JS is still very elementary, so some of the things I say/do could surely be done 
+						in a better/proper "Angular" way.
+					</p>					
 				</section>
 				<section id="listview">
 					<h3>Angular powered <b>list-view</b></h3>
 					<p>
-						We start by rolling out and angular powered list-view. The code of this "framework class"
+						We start by rolling out an Angular powered <b>list-view</b>. The code of this "framework class"
 						can be seen <a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular/src/main/java/com/antilia/angular/repeater/AngularListView.java">here</a>.
 						This class acts as: 
+					</p>
 						<ol>
 							<li>
-								A repeater receiving a list of objects of some kind and an interface
+								A repeater receiving a list of objects, of some kind, and an interface
 								<a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular/src/main/java/com/antilia/angular/repeater/IJSONifier.java">IJSONifier</a>
 								that knows how to translate those objects into JSON. 
 								<pre class="code language-java">								
@@ -45,15 +48,15 @@ public interface IJSONifier&lt;B> extends Serializable {
 
 	B formJSON(String json);
 }
-								
 								</pre>								
 								This JSON could be 
 								either served with the list view "HTML" or lazily loaded once the angular component 
-								is initialized at client side. 
+								is initialized at client side (or read form any URL on your application: e.g. a mounted 
+								resource). 
 							</li>
 							<li>
 								The list of objects will be available at client side as an array of JSON objects 
-								assigned to the variable $scope.elements.
+								assigned to the (scoped) variable $scope.elements. (You can read about Angular scopes <a href="http://docs.angularjs.org/api/ng.$rootScope.Scope">here</a>).
 							</li>							
 							<li>
 								The server side template for AngularListView  is  
@@ -70,7 +73,6 @@ public interface IJSONifier&lt;B> extends Serializable {
 								all elements in <b>elements</b> array. 
 							</li>
 						</ol>						
-					</p>
 				</section>
 				<section>
 					<h3>Basic example</h3>
