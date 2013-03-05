@@ -118,7 +118,7 @@ public class BasicListViewPage extends WebPage {
 &lt;/body>
 					</pre>
 					<p>
-						The result can be seen <wicket:link><a href="/basic/BasicListViewPage.html" >here</a></wicket:link>. How example works?
+						The result can be seen <wicket:link><a href="/basic/" >here</a></wicket:link>. How example works?
 					</p>
 					<ol>
 						<li>
@@ -139,7 +139,7 @@ function Persons ($scope, $http ) {
 						</li>
 						<li>
 							Previous <b>Persons</b> context  will be bound to HTML (on client)
-							<pre>
+							<pre class="code language-html">
 &lt;div id="persons7" class="ng-scope" ng-controller="Persons" wicket:id="persons">
 	&lt;ol>
 		&lt;li>
@@ -153,8 +153,195 @@ function Persons ($scope, $http ) {
 					</ol>					
 				</section>
 				<section>
-					<h3>Additional examples</h3>
+					<h3>Loading elements lazily</h3>
+					<p>	
+						Loading elements lazily (after Angular initializes the page) is very easy. Just pass
+						a lazy flag equal <b>true</b> to BasicPersonListView.
+					</p>
+					<pre class="code language-java">
+public class BasicListViewLazyPage extends WebPage {
+
+
+	public BasicListViewLazyPage() {
+		add(new BasicPersonListView("persons", true));
+	}
+}						
+					</pre>
+					<p>
+						You can see this at work <wicket:link><a href="/basic-lazy/" >here</a></wicket:link>.
+						Mind that after page is loaded an addition (Angular) AJAX  request is issued to load the JSON
+						to populate the list view at client side.  
+					</p>
+					<p>
+						<b>Note:</b> Class <b>AngularListView</b>  will take care of the details for your. 
+						What it does is:						 
+					</p>
+					<ol>
+						<li>
+							AngularListView implements IResourceListener and uses this interface as context to serve the JSON. If you are interested in the details 
+							see private class <b>AngularListView#JSONListHandler</b> and how it is used.														
+						</li>
+						<li>
+							At client side AngularListView will generate a scope like this 
+						<pre class="code language-javascript">
+function Persons ($scope, $http ) {
+	$http.get('./?-IResourceListener-persons&_jonsData=true').success(function(data) {$scope.elements = data;});;;
+...
+} 						
+						</pre>						
+							That will trigger the loading of JSON after page has been loaded.
+						</li>
+					</ol>
 				</section>	
+				<section>
+						<h3>Using angular to do some client side filtering sorting</h3>					
+						<p>	
+							Let's use some angular magic to do some fun stuff at client side!  
+						</p>
+						<p>
+							We start by modifying PersonsListView so that it also contains some
+							client side filtering properties and some cosmetic CSS.
+							We do so by supplying an overriding <b>PersonsListView.html</b>,
+							that looks like follows:  
+						</p>
+						<pre class="code language-html">
+&lt;wicket:panel>
+&lt;div class="container-fluid">
+  &lt;div class="row-fluid">
+    &lt;div class="span2"> 	    
+ 	&lt;p>
+      &lt;label>&lt;wicket:message key="search"/>&lt;/label> &lt;input ng-model="query">
+    &lt;/p>  
+    &lt;p>
+    	&lt;label>&lt;wicket:message key="sortBy"/>&lt;/label>
+		&lt;select ng-model="orderProp">
+			&lt;option value="name">&lt;wicket:message key="name"/>&lt;/option>
+			&lt;option value="lastName">&lt;wicket:message key="lastName"/>&lt;/option>
+		    &lt;option value="age">&lt;wicket:message key="age"/>&lt;/option>
+		    &lt;option value="registered">&lt;wicket:message key="registered"/>&lt;/option>
+		&lt;/select>
+ 	&lt;/p>
+    &lt;/div>
+    &lt;div class="span10">
+	  &lt;h2 class="persons">Persons&lt;/h2> 
+      &lt;div class="persons">
+		&lt;table>    
+			&lt;thead>
+			&lt;tr>
+	      	  &lt;th>
+	          	&lt;wicket:message key="id"/>
+	          &lt;/th>
+	          &lt;th>
+	          	&lt;wicket:message key="name"/>
+	          &lt;/th>
+	          &lt;th>
+	          	&lt;wicket:message key="lastName"/>
+	          &lt;/th>
+			  &lt;th>
+	          	&lt;wicket:message key="image"/>
+	          &lt;/th>
+			  &lt;th>
+	          	&lt;wicket:message key="age"/>
+	          &lt;/th>	
+			  &lt;th>
+	          	&lt;wicket:message key="registered"/>
+	          &lt;/th>
+	        &lt;/tr>
+				
+			&lt;/thead> 
+	      	&lt;tbody>
+	      	&lt;tr ng-repeat="person in elements | filter:query | orderBy:orderProp" ng-class-odd="'odd'" ng-class-even="'even'">
+	      	  &lt;td>
+	          	{{person.id}}
+	          &lt;/td>
+	          &lt;td>
+	          	{{person.name}}
+	          &lt;/td>
+	          &lt;td>
+	          	{{person.lastName}}
+	          &lt;/td>
+	          &lt;td>
+	          	&lt;img ng-src="{{person.img}}"/>
+	          &lt;/td>
+			  &lt;td>
+	          	{{person.age}}
+	          &lt;/td>
+	          &lt;td>
+	          	{{person.registered}}
+	          &lt;/td>
+	        &lt;/tr>
+        	&lt;/tbody>         
+      	&lt;/table>		
+      &lt;/div> 
+    &lt;/div>
+  &lt;/div>
+&lt;/div>
+&lt;/wicket:panel>						
+					</pre>
+					<p>
+						The key points to remark here are:						
+					</p>	
+					<ol>
+						<li>
+							The HTML code
+							<pre class="code language-html">
+	&lt;p>
+      &lt;label>&lt;wicket:message key="search"/>&lt;/label> &lt;input ng-model="query">
+    &lt;/p>  
+    &lt;p>
+    	&lt;label>&lt;wicket:message key="sortBy"/>&lt;/label>
+		&lt;select ng-model="orderProp">
+			&lt;option value="name">&lt;wicket:message key="name"/>&lt;/option>
+			&lt;option value="lastName">&lt;wicket:message key="lastName"/>&lt;/option>
+		    &lt;option value="age">&lt;wicket:message key="age"/>&lt;/option>
+		    &lt;option value="registered">&lt;wicket:message key="registered"/>&lt;/option>
+		&lt;/select>
+ 	&lt;/p>							
+							</pre>
+							creates some client side filters. Those filters are used on 
+							<pre class="code language-html">
+   	&lt;tr ng-repeat="person in elements | filter:query | orderBy:orderProp" ng-class-odd="'odd'" ng-class-even="'even'">
+	      	  &lt;td>
+	          	{{person.id}}
+	          &lt;/td>
+	          &lt;td>
+	          	{{person.name}}
+	          &lt;/td>
+			  ...
+	&lt;/tr>		  	          							
+							</pre>	
+							to filter the iterated list.											
+						</li>
+						<li>
+							We are using to generate the cliet side "angular template". So, all 118n and so on is generated by 
+							Wicket wich makes this consitent with the "just wicket based" rest of the application. 
+						</li>
+						<li>
+						Our new <b>PersonsListView</b> class just contains an additional overriden method
+						<pre class="code language-java">
+public class PersonsListView extends AngularListView&lt;Person> {
+	
+	...
+	
+	@Override
+	protected void contributeToScope(StringBuilder scope) {
+		scope.append("$scope.orderProp = 'age';\n");
+	
+	}
+}						
+						</pre>						
+						This is used to initialize the "sorting filter" <b>orderProp</b> to be "age" when 
+						page is initially loaded.
+						</li>
+					</ol>
+					<p>
+						The result can be seen in action <wicket:link><a href="/filtering/" >here</a></wicket:link>
+					</p>				
+				</section>
+				<section>
+					<h3>Doing stateless AJAX with help of Angular AJAX.</h3>
+				</section>	
+							
 				<section>
 					<h3>Additional examples</h3>
 					<ol>

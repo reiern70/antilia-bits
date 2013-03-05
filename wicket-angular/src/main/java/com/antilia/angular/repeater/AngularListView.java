@@ -67,7 +67,7 @@ public class AngularListView<B> extends Panel implements IResourceListener {
 		public String contributeToScope(Map<String, Object> variables) {
 			StringBuilder builder = new StringBuilder();
 			String url = (String)variables.get("url");
-			url += url.indexOf('&')>0?("&"+JSON_DATA+"=true"):"";
+			url += url.indexOf('?')>0?("&"+JSON_DATA+"=true"):"";
 			if(lazy) {
 				builder.append("$http.get('");
 				builder.append(url);

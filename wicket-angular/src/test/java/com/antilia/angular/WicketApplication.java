@@ -15,7 +15,9 @@ import org.apache.wicket.protocol.http.WebApplication;
 import com.antilia.angular.example.IPersonService;
 import com.antilia.angular.example.Person;
 import com.antilia.angular.example.PersonsJSonifier;
+import com.antilia.angular.example.basic.BasicListViewLazyPage;
 import com.antilia.angular.example.basic.BasicListViewPage;
+import com.antilia.angular.example.filtering.FilterPersonListViewPage;
 import com.antilia.angular.repeater.IJSONifier;
 import com.antilia.angular.repeater.JsonAngularListViewResourceReference;
 
@@ -116,7 +118,9 @@ public class WicketApplication extends WebApplication
 			}
 		});
 		
-		mountPage("/basic", BasicListViewPage.class);
+		mountPage("basic", BasicListViewPage.class);
+		mountPage("basic-lazy", BasicListViewLazyPage.class);
+		mountPage("/filtering", FilterPersonListViewPage.class);
 		
 		// add your configuration here
 	}
