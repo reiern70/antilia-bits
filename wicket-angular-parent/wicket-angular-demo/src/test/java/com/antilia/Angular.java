@@ -1,4 +1,4 @@
-package com.antilia.angular;
+package com.antilia;
 
 import org.apache.wicket.util.time.Duration;
 import org.eclipse.jetty.server.Server;

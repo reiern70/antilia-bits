@@ -25,7 +25,7 @@ import com.antilia.angular.repeater.JsonAngularListViewResourceReference;
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start class.
  * 
- * @see com.antilia.angular.Angular#main(String[])
+ * @see com.antilia.Angular#main(String[])
  */
 public class WicketApplication extends WebApplication
 {    	
