@@ -12,7 +12,7 @@
 			<div class="span8">
 				<h2>Building <a href="http://angularjs.org/">AngularJS</a> powered <a href="http://wicket.apache.org/">Apache Wicket</a> based WEB application</h2>
 				<p>
-					By: Ernesto Reinaldo Barreiro.  
+					By: Ernesto Reinaldo Barreiro.  (05-Feb-2013).
 				</p>
 				<section id="introduction">
 					<h3>Introduction</h3>
@@ -347,7 +347,115 @@ public class PersonsListView extends AngularListView&lt;Person> {
 						JSON based AJAX approach and still keeping everything clena an neat at server 
 						side.
 					</p>
-					
+					<p>
+						The general idea behind this example is the following.						
+					</p>
+					<ol>
+						<li>
+							We will have a <b>personsContext</b> Angular scope that will have a 
+							<b>persons</b> list sub-scope and a <b>persons-detais</b> sub-scope. 
+							In HTML
+							<pre class="code language-java">
+  &lt;div wicket:id="personsContext" class="row-fluid">  
+  	&lt;div wicket:id="persons">&lt;/div>
+  	&lt;div wicket:id="details" class="span2 PersonDetail" ng-show="element != null" ng-cloak>
+    &lt;/div>
+  &lt;/div>
+							</pre>
+						</li>
+						<li>
+							Persons-list scope will fire (<a href="http://docs.angularjs.org/api/ng.$rootScope.Scope">emit</a>) some client side Angular event (with name "Persons-RowSelected").
+							This event will have info on the row selected. Then personContext scope  will listen to this 
+							event and broad cast a new one ("Persons-RowSelected-1") to "PersonDetails" scope. 
+						</li>
+						<li>
+							Uppon receiving "Persons-RowSelected-1" Persons details panel will 
+							use Angular AJAX functionality to ask sever side for JSON details about 
+							the selected person. 
+						</li>
+					</ol>
+					<p>
+						It might sound complicated but it is all nicelly encapsulated in this Java code.												
+					</p>
+					<pre class="code language-java">
+public class StatelessMasterDetailPage extends WebPage {
+
+	public StatelessMasterDetailPage(final PageParameters parameters) {
+		super(parameters);
+		
+		AngularWebMarkupContainer personsContext = new AngularWebMarkupContainer("personsContext", "PersonsContext");
+		
+		personsContext.addHandler(new EventBroadcasterHandler("PersonsList-RowSelected","PersonsList-RowSelected-1"));
+
+		add(personsContext);
+		
+		personsContext.add(new PersonsAngularListView("persons", "PersonsList", false));
+		
+		personsContext.add(new PersonDetails("details", "PersonDetails", PersonsJSonifier.getInstance()));		
+    }
+}						
+					</pre>
+					<p>
+						Where PersonDetails class is
+					</p>		
+					<pre class="code langaue-java">
+public class PersonDetails extends AngularPanel {
+	
+	private PersonsJSonifier personsJSonifier;
+	
+	public PersonDetails(String id, String scope, PersonsJSonifier personsJSonifier) {
+		super(id, scope);
+		this.personsJSonifier = personsJSonifier;
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		
+		addHandler(new OnUpdateEventHandler&lt;Person>("PersonsList-RowSelected-1") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected Person getElement(Long id) {
+				return WicketApplication.getApplication().getPersonService().find(id);
+			}
+
+			@Override
+			protected String getJSON(Person bean) {
+				return personsJSonifier.toLONGJSON(bean);
+			}
+			
+		});
+	}
+	
+}					
+					</pre>			
+					<p>
+					and <b>PersonDetails.html</b> is like
+					</p>
+					<pre class="code langaue-html">
+	&lt;wicket:panel>
+ 	&lt;h1>{{element.name}} {{element.lastName}} &lt;/h1>
+ 	&lt;div>
+ 		&lt;img ng-src="{{element.bimg}}">
+ 	&lt;/div>
+ 	&lt;div style="clear: both;">&lt;/div>
+ 	&lt;ol>
+ 		&lt;li>&lt;b>Email:&lt;/b> {{element.email}}&lt;/li>
+		&lt;li>&lt;b>Profile:&lt;/b> {{element.ld}}&lt;/li>
+ 	&lt;/ol>
+ 	&lt;/wicket:panel>					
+					</pre>
+					<p>	
+						The only change required for <b>PersonsListView.html</b> is
+					</p>
+					<pre class="code language-html">
+&lt;a href="javaScript:void(0);" ng-click="selectRow(person.id);">{{person.id}}&lt;/a>					
+					</pre>
+					<p>
+						So that "row-selected" event is triggered when user clicks on firts column (of a row).
+					</p>
 					<p>
 						The result can be seen in action <wicket:link><a href="/stateless-master-detail" >here</a></wicket:link>
 					</p>
@@ -355,15 +463,17 @@ public class PersonsListView extends AngularListView&lt;Person> {
 							
 				<section>
 					<h3>Additional examples</h3>
+					<p>
+						Some uncommented examples can be found at
+					</p>
 					<ol>
 						<li>		
-							<a wicket:id="link1">An AngularListView serving JSON from page</a>
+							<a wicket:id="link1">Example of master-detail using modal window</a>
 						</li>
 						<li>
-							<a wicket:id="link2">An AngularListView serving JSON from MountedResource</a>			
-						</li>
-						<li>
-							<a wicket:id="link3">An Pure AngularListView serving JSON from MountedResource</a>			
+							<a wicket:id="link2">
+							Example of master-detail using modal window and JSON served from a mounted 
+							resource </a>			
 						</li>
 					</ol>
 				</section>
