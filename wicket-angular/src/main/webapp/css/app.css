@@ -1,7 +1,27 @@
 /* app css stylesheet */
 
 body {
-  padding-top: 20px;
+  padding-top: 20px;  
+  font-family: "Verdana";
+  font-size: 12pt !important;
+}
+
+p {
+	font-size: 1.0em !important;
+}
+
+section {
+	border-top: 1px solid graytext;	
+}
+
+h3, h2, .code {
+	margin-bottom: 10px !important;
+	margin-top: 10px !important;
+}
+
+section h3, section h2 {
+	background: graytext !important;
+	padding-left: 10px;
 }
 
 h2.persons {

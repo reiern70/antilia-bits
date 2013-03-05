@@ -2,24 +2,175 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Angular demo</title>
+  <title>Angular demo</title>  	
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/bootstrap.css"> 
 </head>
 <body>
-	<div class=""> 
-		<ol>
-			<li>		
-				<a wicket:id="link1">An AngularListView serving JSON from page</a>
-			</li>
-			<li>
-				<a wicket:id="link2">An AngularListView serving JSON from MountedResource</a>			
-			</li>
-			<li>
-				<a wicket:id="link3">An Pure AngularListView serving JSON from MountedResource</a>			
-			</li>
-		</ol>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span8">
+				<h2>Building <a href="http://angularjs.org/">AngularJS</a> powered <a href="http://wicket.apache.org/">Apache Wicket</a> based WEB application</h2>
+				<p>
+					By: Ernesto Reinaldo Barreiro.  
+				</p>
+				<section id="introduction">
+					<h3>Introduction</h3>
+					<p>
+						The purpose of the small article/demo is to show how Wicket and AngularJS can be used together to 
+						build very responsive-resource-efficient UIs and at the same time still use strong Wicket OO 
+						approach on server side. We will not describe/explain neither AngularJS not Wicket: my knowledge of 
+						angular is still elementary, so some of the things I say/do might surely be 
+						done in a better "Angular" way. 				
+					</p>
+					<p>
+						For a brief introduction to Angular JS read the tutorial in <a href="http://docs.angularjs.org/tutorial/">here</a>.
+					</p>
+				</section>
+				<section id="listview">
+					<h3>Angular powered <b>list-view</b></h3>
+					<p>
+						We start by rolling out and angular powered list-view. The code of this "framework class"
+						can be seen <a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular/src/main/java/com/antilia/angular/repeater/AngularListView.java">here</a>.
+						This class acts as: 
+						<ol>
+							<li>
+								A repeater receiving a list of objects of some kind and an interface
+								<a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular/src/main/java/com/antilia/angular/repeater/IJSONifier.java">IJSONifier</a>
+								that knows how to translate those objects into JSON. 
+								<pre class="code language-java">								
+public interface IJSONifier&lt;B> extends Serializable {	
 
+	String toJSON(B bean);
+
+	B formJSON(String json);
+}
+								
+								</pre>								
+								This JSON could be 
+								either served with the list view "HTML" or lazily loaded once the angular component 
+								is initialized at client side. 
+							</li>
+							<li>
+								The list of objects will be available at client side as an array of JSON objects 
+								assigned to the variable $scope.elements.
+							</li>							
+							<li>
+								The server side template for AngularListView  is  
+								<pre class="code language-html">
+&lt;wicket:panel>
+  &lt;ul>
+    &lt;li ng-repeat="element in elements">
+		&lt;wicket:child/>
+    &lt;/li>
+  &lt;/ul>
+&lt;/wicket:panel>									
+								</pre>
+								So, it will generate a client side angular "template" which will make Angular cycle over 
+								all elements in <b>elements</b> array. 
+							</li>
+						</ol>						
+					</p>
+				</section>
+				<section>
+					<h3>Basic example</h3>
+					<p>
+						Let's clarify previous section We start by creating a <b>BasicPersonListView</b> defined by	Java class					
+					</p>
+					<pre class="code language-java">
+public class BasicPersonListView extends AngularListView&lt;Person> {
+
+	private static final long serialVersionUID = 1L;
+
+	public BasicPersonListView(String id, boolean lazy) {
+		super(id, WicketApplication.PERSONS, PersonsJSonifier.getInstance(), "Persons", lazy);
+	}
+	
+}					
+					</pre>
+					<p>
+					and HTML template
+					</p>
+					<pre class="code language-html">
+&lt;wicket:extend>
+	{{element.name}}-{{element.lastName}}
+&lt;/wicket:extend>						
+					</pre>
+					<p>
+					The we use this BasicPersonListView as in
+					</p>
+					<pre class="code language-java">
+public class BasicListViewPage extends WebPage {
+
+	private static final long serialVersionUID = 1L;
+
+	public BasicListViewPage() {
+		add(new BasicPersonListView("persons", false));
+	}
+}
+					</pre>
+					<p>
+					with HTML template.
+					</p>					
+					<pre class="code language-html">
+&lt;body>
+&lt;div wicket:id="persons">&lt;/div>
+&lt;/body>
+					</pre>
+					<p>
+						The result can be seen <wicket:link><a href="/basic/BasicListViewPage.html" >here</a></wicket:link>. How example works?
+					</p>
+					<ol>
+						<li>
+							Angular list view will generate the angular "context"
+							<pre class="code language-javascript">
+function Persons ($scope, $http ) {
+	$scope.elements = [{"id":"0","name":"Martina","lastName":"Zaviola","age": 42,"email":"Martina.Zaviola@mycompnay.com","img":"http://www.gravatar.com/avatar/bfaa144388f243e1b5b4472a014f13e1.jpg?s=30&d=monsterid","registered":"06-01-1970"},...];
+	// selected row.
+	$scope.selected=null;
+	$scope.selectRow = function(id) {
+		$scope.selected = id;
+		var args = {'selected': $scope.elements[id].id};
+		var event = 'Persons-' + 'RowSelected';
+	$scope.$emit(event, args);
+	};
+} 								
+							</pre>
+						</li>
+						<li>
+							Previous <b>Persons</b> context  will be bound to HTML (on client)
+							<pre>
+&lt;div id="persons7" class="ng-scope" ng-controller="Persons" wicket:id="persons">
+	&lt;ol>
+		&lt;li>
+			{{element.name}}-{{element.lastName}}.
+		&lt;/li>
+	&lt;/ol>
+&lt;/div>							
+							</pre> 
+							Angular will do the JOB of iterating over <b>$scope.elements</b> and generating client side markup.
+						</li>
+					</ol>					
+				</section>
+				<section>
+					<h3>Additional examples</h3>
+				</section>	
+				<section>
+					<h3>Additional examples</h3>
+					<ol>
+						<li>		
+							<a wicket:id="link1">An AngularListView serving JSON from page</a>
+						</li>
+						<li>
+							<a wicket:id="link2">An AngularListView serving JSON from MountedResource</a>			
+						</li>
+						<li>
+							<a wicket:id="link3">An Pure AngularListView serving JSON from MountedResource</a>			
+						</li>
+					</ol>
+				</section>
+			</div>
+		</div>		
 	</div>
 </body>
 </html>

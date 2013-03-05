@@ -15,6 +15,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import com.antilia.angular.example.IPersonService;
 import com.antilia.angular.example.Person;
 import com.antilia.angular.example.PersonsJSonifier;
+import com.antilia.angular.example.basic.BasicListViewPage;
 import com.antilia.angular.repeater.IJSONifier;
 import com.antilia.angular.repeater.JsonAngularListViewResourceReference;
 
@@ -114,6 +115,8 @@ public class WicketApplication extends WebApplication
 				return PERSONS.iterator();
 			}
 		});
+		
+		mountPage("/basic", BasicListViewPage.class);
 		
 		// add your configuration here
 	}
