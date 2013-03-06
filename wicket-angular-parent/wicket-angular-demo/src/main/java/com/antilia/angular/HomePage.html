@@ -62,7 +62,7 @@ public interface IJSONifier&lt;B> extends Serializable {
 								assigned to the (scoped) variable $scope.elements. (You can read about Angular scopes <a href="http://docs.angularjs.org/api/ng.$rootScope.Scope">here</a>).
 							</li>							
 							<li>
-								The server side template for AngularListView  is  
+								The server side HTML template (<b>AngularListView.html</b>) for AngularListView  is  
 								<pre class="code language-html">
 &lt;wicket:panel>
   &lt;ul>
@@ -72,8 +72,9 @@ public interface IJSONifier&lt;B> extends Serializable {
   &lt;/ul>
 &lt;/wicket:panel>									
 								</pre>
-								So, it will generate a client side angular "template" which will make Angular cycle over 
-								all elements in <b>elements</b> array. 
+								So, it will generate a client side angular HTML "template" which will make Angular cycle over 
+								all elements in <b>elements</b> array. So, you implement and AngularListView by 
+								sub-classing  AngularListView (in the Wicket sense).
 							</li>
 						</ol>						
 				</section>
@@ -93,9 +94,11 @@ public class BasicPersonListView extends AngularListView&lt;Person> {
 	}
 	
 }					
-					</pre>
+					</pre>					
 					<p>
-					and an HTML template <b>AngularListView.html</b>
+					where <b>WicketApplication.PERSONS</b> is a list of Persons and <a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular-parent/wicket-angular-demo/src/main/java/com/antilia/angular/example/PersonsJSonifier.java">PersonsJSonifier</a>
+					is the IJSONifier for <a href="https://github.com/reiern70/antilia-bits/blob/master/wicket-angular-parent/wicket-angular-demo/src/main/java/com/antilia/angular/example/Person.java">Person</a> class.					
+					The HTML template (<b>BasicPersonListView.html</b>) looks like:
 					</p>
 					<pre class="code language-html">
 &lt;wicket:extend>
@@ -103,7 +106,7 @@ public class BasicPersonListView extends AngularListView&lt;Person> {
 &lt;/wicket:extend>						
 					</pre>
 					<p>
-					Then we use this <b>BasicPersonListView</b> as in
+					Then we just use this <b>BasicPersonListView</b> as in
 					</p>
 					<pre class="code language-java">
 public class BasicListViewPage extends WebPage {
