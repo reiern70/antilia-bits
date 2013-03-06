@@ -121,7 +121,7 @@ public class BasicListViewPage extends WebPage {
 &lt;/body>
 					</pre>
 					<p>
-						The result can be seen <wicket:link><a href="/basic/" >here</a></wicket:link>. 
+						The result can be seen <a wicket:id="basic" >here</a>. 
 					</p>
 					<p>
 						<b>How this example works?</b>
@@ -175,7 +175,7 @@ public class BasicListViewLazyPage extends WebPage {
 }						
 					</pre>
 					<p>
-						You can see this at work <wicket:link><a href="/basic-lazy/" >here</a></wicket:link>.
+						You can see this at work <a wicket:id="basiclazy" >here</a>.
 						Mind that after page is loaded an additional (Angular) AJAX  request is issued to fetch the JSON
 						used to populate the list view (at client side).  
 					</p>
@@ -342,7 +342,7 @@ public class PersonsListView extends AngularListView&lt;Person> {
 						</li>
 					</ol>
 					<p>
-						The result can be seen in action <wicket:link><a href="/filtering/" >here</a></wicket:link>
+						The result can be seen in action <a wicket:id="filtering">here</a>
 					</p>				
 				</section>
 				<section>
@@ -463,7 +463,7 @@ public class PersonDetails extends AngularPanel {
 						So that "row-selected" event is triggered when user clicks on firts column (of a row).
 					</p>
 					<p>
-						The result can be seen in action <wicket:link><a href="/stateless-master-detail" >here</a></wicket:link>
+						The result can be seen in action <a wicket:id="stateless">here</a>
 					</p>
 				</section>	
 							
@@ -494,10 +494,15 @@ public class PersonDetails extends AngularPanel {
 							Would it make sense to introduce an angular based AJAX request target? Override/extend wicket machinery for Angular?
 						</li>
 						<li>
-							Does it makes sense to integrate <a href="http://angular-ui.github.com/">http://angular-ui.github.com/</a>? They even have support for Igor's select.
+							Does it makes sense to integrate <a href="http://angular-ui.github.com/">http://angular-ui.github.com/</a>? They even have support for Igor's select2.
 						</li>
 						<li>
 							Explore Angular forms and see how to integrate them with Wicket.
+						</li>
+						<li>
+							In this article we have explored how to use a Wicket page as "a service" for Angular client side machinery. 
+							This has the "limitation" of page access synchronization. So, is this limitation want to be avoided 
+							probaly mounted resources (or other means) should be used to served JSON.
 						</li>
 					</ol>
 				</section>

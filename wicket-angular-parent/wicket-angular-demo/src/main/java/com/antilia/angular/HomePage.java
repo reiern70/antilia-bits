@@ -7,6 +7,10 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.resource.CoreLibrariesContributor;
 
+import com.antilia.angular.example.angularajax.StatelessMasterDetailPage;
+import com.antilia.angular.example.basic.BasicListViewLazyPage;
+import com.antilia.angular.example.basic.BasicListViewPage;
+import com.antilia.angular.example.filtering.FilterPersonListViewPage;
 import com.antilia.angular.example.wicketajax.AngularListViewMountedResourcePage;
 import com.antilia.angular.example.wicketajax.AngularListViewPage;
 
@@ -16,6 +20,12 @@ public class HomePage extends WebPage {
 	public HomePage(final PageParameters parameters) {
 		super(parameters);
 		
+		
+		add(new BookmarkablePageLink<Void>("basic", BasicListViewPage.class, null));
+		add(new BookmarkablePageLink<Void>("basiclazy", BasicListViewLazyPage.class, null));
+		add(new BookmarkablePageLink<Void>("filtering", FilterPersonListViewPage.class, null));
+		add(new BookmarkablePageLink<Void>("stateless", StatelessMasterDetailPage.class, null));
+		
 		add(new BookmarkablePageLink<Void>("link1", AngularListViewPage.class, null));
 		add(new BookmarkablePageLink<Void>("link2", AngularListViewMountedResourcePage.class, null));
     }
@@ -24,7 +34,7 @@ public class HomePage extends WebPage {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		CoreLibrariesContributor.contribute(WicketApplication.getApplication(), response);
-		response.render(JavaScriptHeaderItem.forUrl("/js/jquery.syntaxhighlighter.min.js"));
+		response.render(JavaScriptHeaderItem.forUrl("js/jquery.syntaxhighlighter.min.js"));
 		response.render(JavaScriptHeaderItem.forScript("$.SyntaxHighlighter.init();","SyntaxHighlighter"));
 	}
 }

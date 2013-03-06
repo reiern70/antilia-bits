@@ -45,6 +45,8 @@ public class WicketApplication extends WebApplication
 	
 	private static  RandomString randomString = new RandomString(500);
 	
+	private static JsonAngularListViewResourceReference<Person> personsResource;
+	
 	static {
 		for(long i = 0; i < 300; i++) {
 			Person person = new Person(i);
@@ -104,7 +106,7 @@ public class WicketApplication extends WebApplication
 
 		personService = new PersonService();
 		
-		mountResource(PERSONS_MOUNT_POINT, new JsonAngularListViewResourceReference<Person>() {
+		mountResource(PERSONS_MOUNT_POINT, personsResource = new JsonAngularListViewResourceReference<Person>() {
 
 			private static final long serialVersionUID = 1L;
 
@@ -119,8 +121,8 @@ public class WicketApplication extends WebApplication
 			}
 		});
 		
-		mountPage("basic", BasicListViewPage.class);
-		mountPage("basic-lazy", BasicListViewLazyPage.class);
+		mountPage("/basic", BasicListViewPage.class);
+		mountPage("/basic-lazy", BasicListViewLazyPage.class);
 		mountPage("/filtering", FilterPersonListViewPage.class);
 		
 		mountPage("/stateless-master-detail", StatelessMasterDetailPage.class);
@@ -143,5 +145,9 @@ public class WicketApplication extends WebApplication
 	 */
 	public static WicketApplication getApplication() {
 		return (WicketApplication)get();
+	}
+
+	public static JsonAngularListViewResourceReference<Person> getPersonsResource() {
+		return personsResource;
 	}
 }

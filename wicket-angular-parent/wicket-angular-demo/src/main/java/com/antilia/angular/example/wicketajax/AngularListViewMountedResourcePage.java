@@ -11,7 +11,7 @@ public class AngularListViewMountedResourcePage extends WebPage {
 	public AngularListViewMountedResourcePage(final PageParameters parameters) {
 		super(parameters);
 		
-		add(new PersonsListView("persons", WicketApplication.PERSONS_MOUNT_POINT));
+		add(new PersonsListView("persons", urlFor(WicketApplication.getPersonsResource(), null).toString()));
 
     }
 }

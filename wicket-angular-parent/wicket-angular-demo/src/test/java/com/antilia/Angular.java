@@ -50,7 +50,7 @@ public class Angular {
 
         WebAppContext bb = new WebAppContext();
         bb.setServer(server);
-        bb.setContextPath("/");
+        bb.setContextPath("/angular");
         bb.setWar("src/main/webapp");
 
         // START JMX SERVER
