@@ -35,10 +35,11 @@
 	</properties>
 
 	<modules>
-		<module>wicket-angular</module>
+		<module>wicket-angular-parent</module>
 		<module>wicket-ember</module>
 		<module>wicket-replace-with-effect</module>
-	</modules>
+    <module>content-iframe</module>
+  </modules>
 
 	<build>
 		<resources>
