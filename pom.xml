@@ -39,6 +39,7 @@
 		<module>wicket-ember</module>
 		<module>wicket-replace-with-effect</module>
     <module>content-iframe</module>
+    <module>wicket-sparelinks</module>
   </modules>
 
 	<build>
