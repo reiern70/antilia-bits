@@ -1,10 +1,12 @@
-
 Wicket.SignOut = function(timeout, url, onChange) {
-    this.timeout = timeout;
+    this.timeout = timeout; // Timeout in miliseconds.
     this.url = url;
     this.onChange = onChange;
+    // Add timeout (in seconds) to current time to get absolute timeout time.
+    this.timeoutTime  = new Date();
+    this.timeoutTime.setSeconds(this.timeoutTime.getSeconds() + this.timeout / 1000);
     this.init();
-}
+};
 
 Wicket.SignOut.prototype.init = function() {
     var self = this;
@@ -16,21 +18,29 @@ Wicket.SignOut.prototype.init = function() {
         self.reset();
     });
     this.reset();
-    setTimeout(function(){self.countDown()}, 50);
-}
+    // Set interval to one quarter of the timeout time.
+    var interval = this.timeout / 4;
+    // console.log("interval", interval);
+    setInterval(function(){self.countDown();}, interval);
+};
 
 Wicket.SignOut.prototype.reset = function() {
-    this.counter = this.timeout;
-}
+    // console.log("Reset Called");
+    this.timeoutTime  = new Date();
+    this.timeoutTime.setSeconds(this.timeoutTime.getSeconds() + this.timeout / 1000);
+};
 
 Wicket.SignOut.prototype.countDown = function() {
-    this.counter = this.counter-40;
-    this.onChange(this.counter);
-    var self = this;
-    if(this.counter <= 0) {
-        //trigger the server side sign out
-        Wicket.Ajax.get({"u": self.url});
-    } else {
-        setTimeout(function(){self.countDown()}, 50);
+    now = new Date();
+    // console.log("Countdown Called");
+    // console.log("now, timeoutTime", now, this.timeoutTime);
+    try {
+    	this.onChange(this.timeoutTime, now);
+    } catch(e) {
+    	
     }
-}
+    if (now > this.timeoutTime){
+        //trigger the server side sign out
+        Wicket.Ajax.get({"u": this.url});
+    }
+};
