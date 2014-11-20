@@ -40,9 +40,9 @@
 		<module>wicket-replace-with-effect</module>
     <module>content-iframe</module>
     <module>wicket-sparelinks</module>
-    <module>filegenprogress</module>
      <module>client-sign-out-parent</module>
-    </modules>
+    <module>bgprocess</module>
+  </modules>
 
 	<build>
 		<resources>
