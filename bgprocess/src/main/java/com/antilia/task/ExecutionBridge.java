@@ -24,6 +24,7 @@ public class ExecutionBridge implements Serializable {
 	public ExecutionBridge() {
 	}
 
+
 	public String getTaskName() {
 		return taskName;
 	}

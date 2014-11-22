@@ -1,5 +1,6 @@
 package com.antilia.task;
 
+
 /**
  * @author reiern70
  *
@@ -7,7 +8,7 @@ package com.antilia.task;
 public class TasksRunnable implements Runnable {
 	
 	private ITask task;
-	private ExecutionBridge bridge;
+	private ExecutionBridge bridge;	
 	
 	public TasksRunnable(ITask task, ExecutionBridge bridge) {
 		this.task = task;
