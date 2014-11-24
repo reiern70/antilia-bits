@@ -7,6 +7,6 @@ import java.io.Serializable;
  *
  */
 public interface ITask extends Serializable {
-	
+
 	void doIt(ExecutionBridge bridge);
 }

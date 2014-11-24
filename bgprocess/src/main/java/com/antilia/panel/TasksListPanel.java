@@ -44,7 +44,7 @@ public class TasksListPanel extends Panel {
 			public void populateItem(
 					Item<ICellPopulator<ExecutionBridge>> item,
 					String componentId, IModel<ExecutionBridge> rowModel) {
-				item.add( new ActionsPanel(componentId, rowModel) {					
+				item.add( new ActionsPanel(componentId, rowModel) {
 					@Override
 					public void onAction(AjaxRequestTarget target) {
 						TasksListPanel.this.add(new AjaxSelfUpdatingTimerBehavior( Duration.seconds(5)));
@@ -59,7 +59,7 @@ public class TasksListPanel extends Panel {
 		columns.add( new PropertyColumn<ExecutionBridge, String>(Model.of("Message"), "message") );
 		columns.add( new PropertyColumn<ExecutionBridge, String>(Model.of("Progress"), "progress") );
 		columns.add( new PropertyColumn<ExecutionBridge, String>(Model.of("Finished"), "finished") );
-		AjaxFallbackDefaultDataTable<ExecutionBridge, String> tasks = new AjaxFallbackDefaultDataTable<>("tasks", columns, new TaskDataProvider(), 10);
+		AjaxFallbackDefaultDataTable<ExecutionBridge, String> tasks = new AjaxFallbackDefaultDataTable<ExecutionBridge, String>("tasks", columns, new TaskDataProvider(), 10);
 		add(tasks);
 	}
 	

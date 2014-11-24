@@ -12,15 +12,15 @@ import java.io.Serializable;
 public class ExecutionBridge implements Serializable {
 
 	private String taskName;
-	
-	private boolean stop = false;
-	
-	private boolean cancel = false;
-	
-	private int progress = 0;
-	
+
+	private volatile boolean stop = false;
+
+	private volatile boolean cancel = false;
+
+	private volatile int progress = 0;
+
 	private String message;
-	
+
 	public ExecutionBridge() {
 	}
 
@@ -56,7 +56,7 @@ public class ExecutionBridge implements Serializable {
 	public void setProgress(int progress) {
 		this.progress = progress;
 	}
-	
+
 	public boolean isFinished() {
 		return isCancel() || progress >= 100;
 	}
@@ -68,5 +68,4 @@ public class ExecutionBridge implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
 }

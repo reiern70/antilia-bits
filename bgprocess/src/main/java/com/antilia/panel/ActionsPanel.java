@@ -23,12 +23,12 @@ public abstract class ActionsPanel extends GenericPanel<ExecutionBridge> {
 	 */
 	public ActionsPanel(String id, IModel<ExecutionBridge> model) {
 		super(id, model);
-		add( new AjaxLink<String>("stop") {	
+		add( new AjaxLink<String>("stop") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				ActionsPanel.this.getModel().getObject().setStop(!ActionsPanel.this.getModel().getObject().isStop());
 				onAction(target);
-			}			
+			}
 			@Override
 			protected void onConfigure() {
 				super.onConfigure();
@@ -39,15 +39,15 @@ public abstract class ActionsPanel extends GenericPanel<ExecutionBridge> {
 			public String getObject() {
 				return ActionsPanel.this.getModel().getObject().isStop()?"Restart":"Stop/Pause";
 			}
-		}));		
+		}));
 		add( new AjaxLink<Void>("cancel") {
-			
+
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				ActionsPanel.this.getModel().getObject().setCancel(true);
 				onAction(target);
 			}
-			
+
 			@Override
 			protected void onConfigure() {
 				super.onConfigure();
@@ -55,6 +55,6 @@ public abstract class ActionsPanel extends GenericPanel<ExecutionBridge> {
 			}
 		});
 	}
-	
+
 	public abstract void onAction(AjaxRequestTarget target);
 }

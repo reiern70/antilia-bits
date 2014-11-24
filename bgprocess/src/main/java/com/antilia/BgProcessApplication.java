@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.wicket.Session;
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -31,19 +30,9 @@ import com.google.inject.Module;
 public class BgProcessApplication extends WebApplication
 {
 	ExecutorService executorService =  new ThreadPoolExecutor(10, 10,
-            0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<Runnable>()) {
-		   @Override
-           protected void beforeExecute(final Thread t, final Runnable r) {
-			   ThreadContext.setApplication(BgProcessApplication.this);
-           };
-           @Override
-           protected void afterExecute(final Runnable r, final Throwable t) {
-        	   ThreadContext.setApplication(null);
-           }
-		
-	};
-	
+			0L, TimeUnit.MILLISECONDS,
+			new LinkedBlockingQueue<Runnable>());
+
 	/**
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
@@ -60,28 +49,28 @@ public class BgProcessApplication extends WebApplication
 	@Override
 	public void init()
 	{
-		super.init();		
-		 com.google.inject.Injector injector = Guice.createInjector(newModule());
-		 getComponentInstantiationListeners().add( new GuiceComponentInjector(this, injector)); 
+		super.init();
+		com.google.inject.Injector injector = Guice.createInjector(newModule());
+		getComponentInstantiationListeners().add( new GuiceComponentInjector(this, injector));
 	}
-	
+
 	private Module newModule() {
-		 return new Module() {
-	            public void configure(Binder binder) {
-	                binder.bind(IAnswerService.class).to(AnswerService.class);
-	            }
-	        };
+		return new Module() {
+				public void configure(Binder binder) {
+					binder.bind(IAnswerService.class).to(AnswerService.class);
+				}
+			};
 	}
-	
+
 	public static BgProcessApplication getApplication() {
 		return (BgProcessApplication)get();
 	}
-	
+
 	@Override
 	public Session newSession(Request request, Response response) {
 		return new BgProcessSession(request);
 	}
-	
+
 	public void launch(ITask task) {
 		// we are on WEB thread so services should be normally injected.
 		ExecutionBridge bridge = new ExecutionBridge();
