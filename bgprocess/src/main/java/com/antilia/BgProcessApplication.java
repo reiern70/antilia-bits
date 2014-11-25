@@ -54,6 +54,19 @@ public class BgProcessApplication extends WebApplication
 		getComponentInstantiationListeners().add( new GuiceComponentInjector(this, injector));
 	}
 
+	@Override
+	protected void onDestroy() {
+		executorService.shutdown();
+		try {
+			if (!executorService.awaitTermination(2, TimeUnit.SECONDS)) {
+				executorService.shutdownNow();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		super.onDestroy();
+	}
+
 	private Module newModule() {
 		return new Module() {
 				public void configure(Binder binder) {
