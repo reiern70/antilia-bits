@@ -16,36 +16,37 @@ import com.antilia.task.ExecutionBridge;
  */
 @SuppressWarnings("serial")
 public class BgProcessSession extends WebSession {
-	
-	private List<ExecutionBridge> bridges = new ArrayList<>(); 
+
+	private List<ExecutionBridge> bridges = new ArrayList<ExecutionBridge>();
 
 	public BgProcessSession(Request request) {
 		super(request);
 	}
-	
+
 	public void add(ExecutionBridge bridge) {
 		bridges.add(bridge);
 	}
-	
+
 	public synchronized void  pruneFinishedTasks() {
-		ArrayList<ExecutionBridge> bridges = new ArrayList<>();
+		ArrayList<ExecutionBridge> nonFinishedBridges = new ArrayList<ExecutionBridge>();
 		for(ExecutionBridge bridge: this.bridges) {
-			if(bridge.isFinished()) {
-				bridges.add(bridge);
+			if (!bridge.isFinished()) {
+				nonFinishedBridges.add(bridge);
 			}
 		}
-		this.bridges = bridges;
+		this.bridges = nonFinishedBridges;
 	}
-	
+
 	public Iterator<ExecutionBridge> getTasksPage(int start, int size) {
-		int min = Math.min(size, bridges.size()); 
+		int min = Math.min(size, bridges.size());
+		// mgrigorov: maybe make a copy of the subList to avoid ConcurrentModificationExceptions ?!
 		return bridges.subList(start, min).iterator();
 	}
-	
+
 	public long countTasks() {
 		return bridges.size();
 	}
-			
+
 	public static BgProcessSession getSession() {
 		return (BgProcessSession)get();
 	}

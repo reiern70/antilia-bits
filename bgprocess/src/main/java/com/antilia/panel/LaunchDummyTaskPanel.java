@@ -23,7 +23,7 @@ public class LaunchDummyTaskPanel extends Panel {
 	 */
 	public LaunchDummyTaskPanel(String id) {
 		super(id);
-		add( new AjaxLink<Void>("launch") {			
+		add( new AjaxLink<Void>("launch") {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				BgProcessApplication.getApplication().launch( new DummyTask() );

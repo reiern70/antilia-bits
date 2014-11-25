@@ -31,6 +31,6 @@ public class TaskDataProvider extends SortableDataProvider<ExecutionBridge, Stri
 	
 	public long size() {
 		return BgProcessSession.getSession().countTasks();
-	};
+	}
 
 }
