@@ -40,8 +40,8 @@ public class DummyTask implements ITask {
 				bridge.setMessage(answerService.getMessage(AnswerType.IS_STOP, i));
 			} else {
 				bridge.setMessage(answerService.getMessage(AnswerType.ALL_OK, i));
-			}
-			i++;
+				i++;
+			}	
 			try {
 				Thread.sleep(1000L);
 			} catch (InterruptedException e) {
