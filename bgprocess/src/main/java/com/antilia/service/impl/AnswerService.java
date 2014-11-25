@@ -4,7 +4,6 @@
 package com.antilia.service.impl;
 
 import com.antilia.service.IAnswerService;
-import com.antilia.task.dummy.DummyTask;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.slf4j.Logger;
