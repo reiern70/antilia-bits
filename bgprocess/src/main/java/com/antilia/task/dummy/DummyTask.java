@@ -41,7 +41,7 @@ public class DummyTask implements ITask {
 			} else {
 				bridge.setMessage(answerService.getMessage(AnswerType.ALL_OK, i));
 				i++;
-			}	
+			}
 			try {
 				Thread.sleep(1000L);
 			} catch (InterruptedException e) {
