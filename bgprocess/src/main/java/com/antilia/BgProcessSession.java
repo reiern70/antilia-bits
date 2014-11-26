@@ -23,7 +23,8 @@ public class BgProcessSession extends WebSession {
 		super(request);
 	}
 
-	public void add(ExecutionBridge bridge) {
+	public synchronized void add(ExecutionBridge bridge) {
+		bind();
 		bridges.add(bridge);
 	}
 
@@ -39,8 +40,7 @@ public class BgProcessSession extends WebSession {
 
 	public Iterator<ExecutionBridge> getTasksPage(int start, int size) {
 		int min = Math.min(size, bridges.size());
-		// mgrigorov: maybe make a copy of the subList to avoid ConcurrentModificationExceptions ?!
-		return bridges.subList(start, min).iterator();
+		return new ArrayList<ExecutionBridge>(bridges.subList(start, min)).iterator();
 	}
 
 	public long countTasks() {
