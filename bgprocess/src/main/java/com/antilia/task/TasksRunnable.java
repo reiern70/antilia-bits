@@ -26,15 +26,12 @@ public class TasksRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		try
-		{
+		try {
 			ThreadContext.setApplication(application);
 			ThreadContext.setSession(session);
 			task.doIt(bridge);
-		} finally
-		{
+		} finally {
 			ThreadContext.detach();
 		}
 	}
-
 }
